@@ -1,6 +1,8 @@
+
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Recipe } from '@/types';
 import {
   Card,
@@ -20,9 +22,9 @@ interface RecipeCardProps {
 
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
   return (
-    <Card className="w-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 animate-fade-in">
+    <Card className="w-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 animate-fade-in group">
       <CardHeader className="p-0">
-        <div className="relative w-full h-48 md:h-64">
+        <Link href={`/recipe/${recipe.id}`} className="block relative w-full h-48 md:h-64">
           <Image
             src={recipe.imageUrl}
             alt={recipe.title}
@@ -31,9 +33,13 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             data-ai-hint={recipe.imageHint}
             className="transition-transform duration-300 group-hover:scale-105"
           />
-        </div>
+        </Link>
         <div className="p-6">
-          <CardTitle className="font-headline text-2xl mb-2">{recipe.title}</CardTitle>
+          <CardTitle className="font-headline text-2xl mb-2">
+            <Link href={`/recipe/${recipe.id}`} className="hover:text-primary transition-colors">
+              {recipe.title}
+            </Link>
+          </CardTitle>
           <CardDescription className="text-muted-foreground text-sm">{recipe.description}</CardDescription>
         </div>
       </CardHeader>
