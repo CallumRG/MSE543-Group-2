@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -108,5 +109,11 @@ h1, h2, h3, h4, h5, h6 {
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .shadow-text {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 }
