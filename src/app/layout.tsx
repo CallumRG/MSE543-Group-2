@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   }
 };
 
-// Replace with your actual Google Analytics Tracking ID
-const GA_TRACKING_ID = "GA_TRACKING_ID_PLACEHOLDER";
+// Google Analytics Tracking ID
+const GA_TRACKING_ID = "G-68ST00N4RQ";
 
 export default function RootLayout({
   children,
@@ -30,28 +30,22 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
         
         {/* Google Analytics Script */}
-        {GA_TRACKING_ID !== "GA_TRACKING_ID_PLACEHOLDER" && (
-          <>
-            <Script
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-            />
-            <Script
-              id="gtag-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${GA_TRACKING_ID}', {
-                    page_path: window.location.pathname,
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_TRACKING_ID}');
+            `,
+          }}
+        />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <Header />
