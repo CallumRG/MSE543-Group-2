@@ -86,15 +86,10 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
         </Accordion>
       </CardContent>
       <CardFooter className="px-6 py-4 flex flex-col sm:flex-row justify-between items-center border-t">
-        <div className="flex items-center gap-2">
-          <StarRating initialRating={recipe.rating} recipeId={recipe.id} readOnly={true} />
-          <p className="text-sm text-muted-foreground">
-            {recipe.rating.toFixed(1)} stars ({recipe.numRatings} ratings)
-          </p>
-        </div>
-        <Link href={`/recipe/${recipe.id}/review`} className="text-primary hover:text-primary/80 text-sm font-medium mt-2 sm:mt-0">
-          Leave Review →
-        </Link>
+        <StarRating initialRating={recipe.rating} recipeId={recipe.id} readOnly={false} />
+        <p className="text-sm text-muted-foreground mt-2 sm:mt-0">
+          {recipe.rating.toFixed(1)} stars ({recipe.numRatings} ratings)
+        </p>
       </CardFooter>
     </Card>
   );

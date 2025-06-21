@@ -1,11 +1,10 @@
-
 import { getRecipeById } from '@/lib/recipes';
 import type { Recipe } from '@/types';
 import Image from 'next/image';
-import { Clock, Users, ChefHat, Star, AlertTriangle } from 'lucide-react';
+import { Clock, Users, ChefHat, Star, AlertTriangle, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import StarRating from '@/components/recipes/StarRating'; // Re-using StarRating for display + interaction
+import StarRating from '@/components/recipes/StarRating';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -106,9 +105,12 @@ export default async function RecipePage({ params }: RecipePageProps) {
               ({recipe.rating.toFixed(1)} stars from {recipe.numRatings} ratings)
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex gap-2">
             <Button asChild>
-              <Link href={`/recipe/${recipe.id}/review`}>Leave Review</Link>
+              <Link href={`/recipe/${recipe.id}/review`}>
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Leave Review
+              </Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="/submit-recipe">Submit Your Own Fantasy!</Link>
