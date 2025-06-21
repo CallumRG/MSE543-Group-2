@@ -5,7 +5,7 @@ export const mockRecipes: Recipe[] = [
     id: '1',
     title: 'Invisible Ink Lemonade Cookies',
     description: 'Magically delicious cookies that reveal a secret message when dipped in milk! (Not really, but they taste like it.)',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: '/foodpic1.jpg',
     imageHint: 'cookies lemonade',
     ingredients: [
       '1 cup "Vanishing" Flour (all-purpose)',
@@ -37,7 +37,7 @@ export const mockRecipes: Recipe[] = [
     id: '2',
     title: 'Zero-Gravity Chocolate Soufflé',
     description: 'A chocolate soufflé so light, it practically defies gravity. Perfect for aspiring astronauts with a sweet tooth.',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: '/foodpic2.jpg',
     imageHint: 'chocolate souffle',
     ingredients: [
       '4 oz Bittersweet Chocolate, chopped (the darker the void, the better)',
@@ -71,7 +71,7 @@ export const mockRecipes: Recipe[] = [
     id: '3',
     title: 'Gummy Bear Infused Rainbow Bread',
     description: 'A vibrant, chewy bread that tastes like a rainbow and is packed with molten gummy bear goodness. A true fantasy bake!',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: '/foodpic3.jpeg',
     imageHint: 'rainbow bread',
     ingredients: [
       '1 cup Warm Water (105-115°F, for awakening the yeast gnomes)',
