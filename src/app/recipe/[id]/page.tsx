@@ -101,14 +101,19 @@ export default async function RecipePage({ params }: RecipePageProps) {
 
         <CardFooter className="p-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-muted/30">
            <div className="flex items-center gap-2">
-            <StarRating initialRating={recipe.rating} recipeId={recipe.id} readOnly={false} />
+            <StarRating initialRating={recipe.rating} recipeId={recipe.id} readOnly={true} />
              <p className="text-sm text-muted-foreground">
               ({recipe.rating.toFixed(1)} stars from {recipe.numRatings} ratings)
             </p>
           </div>
-           <Button variant="outline" asChild>
-            <Link href="/submit-recipe">Submit Your Own Fantasy!</Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button asChild>
+              <Link href={`/recipe/${recipe.id}/review`}>Leave Review</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/submit-recipe">Submit Your Own Fantasy!</Link>
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </article>
