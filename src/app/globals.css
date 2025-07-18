@@ -33,12 +33,12 @@ h1, h2, h3, h4, h5, h6 {
     --accent: 46 100% 67%; /* Mustard Yellow #FFDB58 */
     --accent-foreground: 25 35% 20%; /* Dark Brown */
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 65% 40%; /* Darker red for better readability */
     --destructive-foreground: 0 0% 98%;
 
     --border: 34 30% 80%; /* Peach-toned border */
     --input: 0 0% 100%; /* White for input fields */
-    --ring: 16 100% 50%; /* Darker coral for focus rings */
+    --ring: 217 91% 60%; /* Blue for focus rings */
 
     --radius: 0.5rem;
 
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 
     --border: 25 35% 30%;
     --input: 25 35% 25%;
-    --ring: 16 100% 50%; /* Darker coral */
+    --ring: 217 91% 60%; /* Blue for focus rings */
 
     /* Sidebar dark theme colors */
     --sidebar-background: 25 35% 10%;

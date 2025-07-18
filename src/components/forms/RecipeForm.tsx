@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitRecipe } from "@/lib/recipes"; // Assuming a function to "submit"
 import { useState, useRef } from "react";
-import { Loader2, Upload, X, Camera, Image as ImageIcon } from "lucide-react";
+import { Loader2, Upload, X, Camera, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
 
 const recipeFormSchema = z.object({
   title: z.string().min(5, {
@@ -31,11 +31,14 @@ const recipeFormSchema = z.object({
   }).max(500, {
     message: "Description must not exceed 500 characters."
   }),
-  ingredients: z.string().min(10, {
-    message: "Please list at least one ingredient (min 10 characters total).",
+  ingredients: z.array(z.object({
+    quantity: z.string().min(1, "Quantity is required"),
+    ingredient: z.string().min(1, "Ingredient name is required")
+  })).min(1, {
+    message: "Please add at least one ingredient.",
   }),
-  instructions: z.string().min(20, {
-    message: "Instructions must be at least 20 characters.",
+  instructions: z.array(z.string().min(1, "Instruction step is required")).min(1, {
+    message: "Please add at least one instruction step.",
   }),
   prepTime: z.string().optional(),
   cookTime: z.string().optional(),
@@ -47,8 +50,8 @@ type RecipeFormValues = z.infer<typeof recipeFormSchema>;
 const defaultValues: Partial<RecipeFormValues> = {
   title: "",
   description: "",
-  ingredients: "",
-  instructions: "",
+  ingredients: [{ quantity: "", ingredient: "" }],
+  instructions: [""],
   prepTime: "",
   cookTime: "",
   servings: "",
@@ -112,7 +115,7 @@ const PhotoUpload = ({ onPhotoChange, selectedPhoto }: PhotoUploadProps) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <FormLabel className="font-headline text-lg">Recipe Photo (Optional)</FormLabel>
+        <FormLabel className="font-headline text-lg">Recipe Photo <span className="font-bold">(Optional)</span></FormLabel>
         {selectedPhoto && (
           <Button
             type="button"
@@ -214,14 +217,34 @@ export function RecipeForm() {
     mode: "onChange",
   });
 
+  const addIngredient = () => {
+    const currentIngredients = form.getValues("ingredients");
+    form.setValue("ingredients", [...currentIngredients, { quantity: "", ingredient: "" }]);
+  };
+
+  const removeIngredient = (index: number) => {
+    const currentIngredients = form.getValues("ingredients");
+    form.setValue("ingredients", currentIngredients.filter((_, i) => i !== index));
+  };
+
+  const addInstruction = () => {
+    const currentInstructions = form.getValues("instructions");
+    form.setValue("instructions", [...currentInstructions, ""]);
+  };
+
+  const removeInstruction = (index: number) => {
+    const currentInstructions = form.getValues("instructions");
+    form.setValue("instructions", currentInstructions.filter((_, i) => i !== index));
+  };
+
   async function onSubmit(data: RecipeFormValues) {
     setIsSubmitting(true);
     try {
-      // Split ingredients and instructions by newline for the mock submission
+      // Format ingredients and instructions for submission
       const recipeDataToSubmit = {
         ...data,
-        ingredients: data.ingredients.split('\n').filter(line => line.trim() !== ''),
-        instructions: data.instructions.split('\n').filter(line => line.trim() !== ''),
+        ingredients: data.ingredients.map(item => `${item.quantity} ${item.ingredient}`),
+        instructions: data.instructions,
       };
       
       const result = await submitRecipe(recipeDataToSubmit);
@@ -305,7 +328,7 @@ export function RecipeForm() {
             name="prepTime"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Prep Time (Optional)</FormLabel>
+                <FormLabel>Prep Time <span className="font-bold">(Optional)</span></FormLabel>
                 <FormControl>
                     <Input placeholder="e.g., 20 lightyears" {...field} />
                 </FormControl>
@@ -318,7 +341,7 @@ export function RecipeForm() {
             name="cookTime"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Cook Time (Optional)</FormLabel>
+                <FormLabel>Cook Time <span className="font-bold">(Optional)</span></FormLabel>
                 <FormControl>
                     <Input placeholder="e.g., 5 parsecs" {...field} />
                 </FormControl>
@@ -331,7 +354,7 @@ export function RecipeForm() {
             name="servings"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Servings (Optional)</FormLabel>
+                <FormLabel>Servings <span className="font-bold">(Optional)</span></FormLabel>
                 <FormControl>
                     <Input placeholder="e.g., 4 hungry aliens" {...field} />
                 </FormControl>
@@ -348,11 +371,53 @@ export function RecipeForm() {
             <FormItem>
               <FormLabel className="font-headline text-lg">Ingredients</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="List your fantastical ingredients, one per line..."
-                  className="resize-y min-h-[150px]"
-                  {...field}
-                />
+                <div className="space-y-3">
+                  {field.value?.map((item, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        placeholder="e.g., 2 cups"
+                        value={item.quantity}
+                        onChange={(e) => {
+                          const newIngredients = [...field.value];
+                          newIngredients[index].quantity = e.target.value;
+                          field.onChange(newIngredients);
+                        }}
+                        className="w-32"
+                      />
+                      <Input
+                        placeholder="e.g., unicorn tears"
+                        value={item.ingredient}
+                        onChange={(e) => {
+                          const newIngredients = [...field.value];
+                          newIngredients[index].ingredient = e.target.value;
+                          field.onChange(newIngredients);
+                        }}
+                        className="flex-1"
+                      />
+                      {field.value.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeIngredient(index)}
+                          className="text-destructive hover:text-destructive/80"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addIngredient}
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Ingredient
+                  </Button>
+                </div>
               </FormControl>
               <FormDescription>
                 Be creative! Think unicorn tears, dragon scales, etc.
@@ -369,11 +434,46 @@ export function RecipeForm() {
             <FormItem>
               <FormLabel className="font-headline text-lg">Instructions</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Describe the magical steps to create your masterpiece, one step per line..."
-                  className="resize-y min-h-[200px]"
-                  {...field}
-                />
+                <div className="space-y-3">
+                  {field.value?.map((instruction, index) => (
+                    <div key={index} className="flex gap-2 items-start">
+                      <span className="text-sm font-medium text-muted-foreground mt-2.5 w-8">
+                        {index + 1}.
+                      </span>
+                      <Input
+                        placeholder="Describe this step..."
+                        value={instruction}
+                        onChange={(e) => {
+                          const newInstructions = [...field.value];
+                          newInstructions[index] = e.target.value;
+                          field.onChange(newInstructions);
+                        }}
+                        className="flex-1"
+                      />
+                      {field.value.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeInstruction(index)}
+                          className="text-destructive hover:text-destructive/80"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addInstruction}
+                    className="w-full"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Step
+                  </Button>
+                </div>
               </FormControl>
               <FormDescription>
                 Detail the process, no matter how absurd!

@@ -226,7 +226,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
 
           {/* Specific Aspect Ratings */}
           <div className="space-y-6 pt-4 border-t">
-            <h3 className="text-lg font-semibold">Rate Specific Aspects</h3>
+            <h3 className="text-lg font-semibold">Rate Specific Aspects <span className="text-sm font-normal text-muted-foreground font-bold">(Optional)</span></h3>
             
             <StarRatingInput
               label="Taste"
@@ -250,7 +250,7 @@ export default function ReviewPage({ params }: ReviewPageProps) {
           {/* Optional Review Text */}
           <div className="space-y-2">
             <Label htmlFor="review-text" className="text-sm font-medium">
-              Additional Comments (Optional)
+              Additional Comments <span className="font-bold">(Optional)</span>
             </Label>
             <Textarea
               id="review-text"
